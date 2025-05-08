@@ -22,6 +22,8 @@ public class Plugin : BasePlugin
         _harmony.PatchAll(System.Reflection.Assembly.GetExecutingAssembly());
 
         CommandRegistry.RegisterAll();
+
+        Logger = Log;
     }
 
     public override bool Unload()

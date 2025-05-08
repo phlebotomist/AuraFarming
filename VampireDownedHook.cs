@@ -51,18 +51,48 @@ public static class VampireDownedAfterKFHook
         downedEvents.Dispose();
     }
 
-    private static void HandleDownedEntity(Entity downedEnt)
+    private static void HandleDownedEntity(Entity downedEntity)
     {
-        var steamIds = VampireDownedHelpers.GetKillerAndVictimIdFromDownedEntity(downedEnt);
+        var steamIds = VampireDownedHelpers.GetKillerAndVictimIdFromDownedEntity(downedEntity);
         if (steamIds == null)
             return;
 
+        // this is duplicate 
+        if (!VampireDownedServerEventSystem.TryFindRootOwner(downedEntity, 1, VWorld.Server.EntityManager, out var victimEntity))
+            return;
+
+        if (!VampireDownedServerEventSystem.TryFindRootOwner(downedEntity.Read<VampireDownedBuff>().Source, 1, VWorld.Server.EntityManager, out var killerEntity))
+            return;
+        var killerPlayerChar = killerEntity.Read<PlayerCharacter>();
+        var victimPlayerChar = victimEntity.Read<PlayerCharacter>();
+        var victimUser = victimPlayerChar.UserEntity.Read<User>();
+        var killerUser = killerPlayerChar.UserEntity.Read<User>();
+        // needs cleanup^^^^
+
         ulong killerId = steamIds.Value.Item1;
         ulong victimId = steamIds.Value.Item2;
-        var killerData = DataStore.PlayerDatas[killerId];
-        var victimData = DataStore.PlayerDatas[victimId];
+        DataStore.PlayerDatas.TryGetValue(killerId, out var killerData);
+        DataStore.PlayerDatas.TryGetValue(victimId, out var victimData);
 
-        Helpers.P($"killer streak AFTER KF RAN: {killerData.CurrentStreak}, victim streak: {victimData.CurrentStreak}");
+        // Just keep it simple for now and always try to remove the victims aura incase he has one.
+        Aura.TryRemoveAllAuras(victimUser.LocalCharacter._Entity);
+
+        Helpers.P($"WE ARE ON A {killerData.CurrentStreak} ks");
+        if (killerData.CurrentStreak == 2)
+        {
+            Helpers.P($"{killerUser.CharacterName} is on a : {killerData.CurrentStreak} and has the T1 Aura applied.");
+            Aura.ApplyAuraSet(killerUser.LocalCharacter._Entity, killerPlayerChar.UserEntity, Aura.aurasT1);
+        }
+        else if (killerData.CurrentStreak == 10)
+        {
+            Helpers.P($"{killerUser.CharacterName} is on a : {killerData.CurrentStreak} and has the T2 Aura applied.");
+            Aura.ApplyAuraSet(killerUser.LocalCharacter._Entity, killerPlayerChar.UserEntity, Aura.aurasT2);
+        }
+        else if (killerData.CurrentStreak == 16)
+        {
+            Helpers.P($"{killerUser.CharacterName} is on a : {killerData.CurrentStreak} and has the T3 Aura applied.");
+            Aura.ApplyAuraSet(killerUser.LocalCharacter._Entity, killerPlayerChar.UserEntity, Aura.aurasT3);
+        }
     }
 }
 
