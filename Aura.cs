@@ -5,6 +5,7 @@ using Stunlock.Core;
 using System.Collections.Generic;
 using ProjectM.Shared;
 using Bloodstone.API;
+using Il2CppInterop.Runtime;
 
 namespace AuraFarming;
 
@@ -46,7 +47,7 @@ class Aura
     // public static List<PrefabGUID> aurasT1 = [Unholy_Vampire_Buff_Bane, Buff_ChurchOfLight_Paladin_FinalStageBuff, Buff_ChurchOfLight_Cleric_Intervene_Shield];
     public static List<PrefabGUID> aurasT1 = [red_glow];
     public static List<PrefabGUID> aurasT2 = [vermintrat];
-    public static List<PrefabGUID> aurasT3 = [AB_Manticore_Flame_Chaos_Burn_LongDebuff, Buff_Militia_InkCrawler_TrailEffect];
+    public static List<PrefabGUID> aurasT3 = [Buff_Militia_InkCrawler_TrailEffect];
     public static List<PrefabGUID> allAuras = [.. aurasT1, .. aurasT2, .. aurasT3];
 
     private static void AddLifeTime(Entity buffEntity)
@@ -66,6 +67,20 @@ class Aura
                 EndAction = LifeTimeEndAction.None,
                 Duration = -1,
             });
+        }
+    }
+
+    private static void AddSuriviveDeath(Entity buffEntity)
+    {
+        buffEntity.Add<Buff_Persists_Through_Death>();
+        if (buffEntity.Has<RemoveBuffOnGameplayEvent>())
+        {
+            VWorld.Server.EntityManager.RemoveComponent(buffEntity, new ComponentType(Il2CppType.Of<RemoveBuffOnGameplayEvent>()));
+        }
+
+        if (buffEntity.Has<RemoveBuffOnGameplayEventEntry>())
+        {
+            VWorld.Server.EntityManager.RemoveComponent(buffEntity, new ComponentType(Il2CppType.Of<RemoveBuffOnGameplayEventEntry>()));
         }
     }
 
@@ -96,7 +111,9 @@ class Aura
             Plugin.Logger.LogError($"Failed to get buff entity for {buffGUID} on {characterUserEntity}");
             return;
         }
+        //last until pvp death:
         AddLifeTime(buffEntity);
+        AddSuriviveDeath(buffEntity);
     }
     public static void TryRemoveAllAuras(Entity playerCharacter)
     {
