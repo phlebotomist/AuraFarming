@@ -77,20 +77,19 @@ public static class VampireDownedAfterKFHook
         // Just keep it simple for now and always try to remove the victims aura incase he has one.
         Aura.TryRemoveAllAuras(victimUser.LocalCharacter._Entity);
 
-        Helpers.P($"WE ARE ON A {killerData.CurrentStreak} ks");
-        if (killerData.CurrentStreak == 2)
+        if (killerData.CurrentStreak == 5)
         {
-            Helpers.P($"{killerUser.CharacterName} is on a : {killerData.CurrentStreak} and has the T1 Aura applied.");
+            Helpers.P($"{killerUser.CharacterName} is on a: {killerData.CurrentStreak} and has the T1 Aura applied.");
             Aura.ApplyAuraSet(killerUser.LocalCharacter._Entity, killerPlayerChar.UserEntity, Aura.aurasT1);
         }
         else if (killerData.CurrentStreak == 10)
         {
-            Helpers.P($"{killerUser.CharacterName} is on a : {killerData.CurrentStreak} and has the T2 Aura applied.");
+            Helpers.P($"{killerUser.CharacterName} is on a: {killerData.CurrentStreak} and has the T2 Aura applied.");
             Aura.ApplyAuraSet(killerUser.LocalCharacter._Entity, killerPlayerChar.UserEntity, Aura.aurasT2);
         }
-        else if (killerData.CurrentStreak == 16)
+        else if (killerData.CurrentStreak == 15)
         {
-            Helpers.P($"{killerUser.CharacterName} is on a : {killerData.CurrentStreak} and has the T3 Aura applied.");
+            Helpers.P($"{killerUser.CharacterName} is on a: {killerData.CurrentStreak} and has the T3 Aura applied.");
             Aura.ApplyAuraSet(killerUser.LocalCharacter._Entity, killerPlayerChar.UserEntity, Aura.aurasT3);
         }
     }

@@ -23,6 +23,11 @@ class Aura
     // .buff 1670636401 m 30
     // .buff -1124645803 m 30
 
+
+    // vfx only by default:
+    public static PrefabGUID red_glow = new PrefabGUID(784366378);
+    public static PrefabGUID vermintrat = new PrefabGUID(933825031);
+
     // t1:
     public static PrefabGUID Unholy_Vampire_Buff_Bane = new PrefabGUID(1688799287);
     public static PrefabGUID Buff_ChurchOfLight_Paladin_FinalStageBuff = new PrefabGUID(2144624015);
@@ -39,8 +44,8 @@ class Aura
     public static PrefabGUID Buff_Militia_InkCrawler_TrailEffect = new PrefabGUID(-1124645803);
 
     // public static List<PrefabGUID> aurasT1 = [Unholy_Vampire_Buff_Bane, Buff_ChurchOfLight_Paladin_FinalStageBuff, Buff_ChurchOfLight_Cleric_Intervene_Shield];
-    public static List<PrefabGUID> aurasT1 = [Buff_ChurchOfLight_Paladin_FinalStageBuff];
-    public static List<PrefabGUID> aurasT2 = [Buff_Cultist_BloodFrenzy_Buff, Buff_MountainBeast_DashRotationImpair];
+    public static List<PrefabGUID> aurasT1 = [red_glow];
+    public static List<PrefabGUID> aurasT2 = [vermintrat];
     public static List<PrefabGUID> aurasT3 = [AB_Manticore_Flame_Chaos_Burn_LongDebuff, Buff_Militia_InkCrawler_TrailEffect];
     public static List<PrefabGUID> allAuras = [.. aurasT1, .. aurasT2, .. aurasT3];
 

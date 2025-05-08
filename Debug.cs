@@ -109,6 +109,9 @@ public static class D
         var componentTypes = em.GetComponentTypes(buffEntity);
         try
         {
+            Plugin.Logger.LogInfo($"=====================================================");
+            Plugin.Logger.LogInfo($"===== START COMPONENT TYPES FOR : {buffEntity} ========");
+            Plugin.Logger.LogInfo($"=====================================================");
             foreach (var type in componentTypes)
             {
                 try
@@ -120,6 +123,9 @@ public static class D
                     Plugin.Logger.LogWarning($"Could not read {type}: {ex.Message}");
                 }
             }
+            Plugin.Logger.LogInfo($"=====================================================");
+            Plugin.Logger.LogInfo($"===== END COMPONENT TYPES FOR : {buffEntity} ========");
+            Plugin.Logger.LogInfo($"=====================================================");
         }
         catch (Exception ex)
         {
